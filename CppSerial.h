@@ -6,40 +6,53 @@
 #include <Windows.h>
 #include <cstdint>
 #include <memory>
+#include <string>
+#include <array>
+#include <cstring>
 
-constexpr uint16_t FC_DTRDSR	= 0x01;
-constexpr uint16_t FC_RTSCTS	= 0x02;
-constexpr uint16_t FC_XONXOFF = 0x04;
-constexpr uint16_t ASCII_BEL  = 0x07;
-constexpr uint16_t ASCII_BS   = 0x08;
-constexpr uint16_t ASCII_LF   = 0x0A;
-constexpr uint16_t ASCII_CR   = 0x0D;
-constexpr uint16_t ASCII_XON  = 0x11;
-constexpr uint16_t ASCII_XOFF = 0x13;
+using u8 = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
 
-class CppSerial
-{
+class CppSerial {
 
-public:
-	CppSerial();
-	~CppSerial();
+	public:
+		
+		CppSerial();
+		~CppSerial();
 
-	BOOL Open( int nPort = 1, int nBaud = 9600 );
-	BOOL Close( void );
+		BOOL Open(int nPort = 1, int nBaud = 9600);
+		BOOL Close();
 
-	int ReadData( void *, int );
-	int SendData( const char *, int );
-	int ReadDataWaiting( void );
+		int ReadData(void*, const int);
+		int ReadDataWaiting();
+		
+		BOOL getPortOpen() noexcept;
 
-	BOOL IsOpened( void ){ return( port_open ); }
+	protected:
 
-protected:
-	BOOL WriteCommByte( unsigned char );
+		HANDLE port_handle;
+		OVERLAPPED m_OverlappedRead;
+		BOOL port_open;
 
-	HANDLE port_handle;
-	OVERLAPPED m_OverlappedRead, m_OverlappedWrite;
-	BOOL port_open;
+	private:
+		// disable copy/move construction/assignment
+		CppSerial(const CppSerial&) = delete;
+		CppSerial(CppSerial&&) = delete;
+		CppSerial& operator=(const CppSerial&) = delete;
+		CppSerial& operator=(CppSerial&&) = delete;
 
+		const std::array<std::string, 22> com_ports{ "\\\\.\\COM1", "\\\\.\\COM1",
+																								 "\\\\.\\COM2", "\\\\.\\COM3",
+																								 "\\\\.\\COM4", "\\\\.\\COM5",
+																								 "\\\\.\\COM6", "\\\\.\\COM7",
+																								 "\\\\.\\COM8", "\\\\.\\COM9",
+																								 "\\\\.\\COM10", "\\\\.\\COM11",
+																								 "\\\\.\\COM12", "\\\\.\\COM13",
+																								 "\\\\.\\COM14", "\\\\.\\COM15",
+																								 "\\\\.\\COM16", "\\\\.\\COM17",
+																								 "\\\\.\\COM18", "\\\\.\\COM19",
+																								 "\\\\.\\COM20", "\\\\.\\COM21" };
 };
 
 #endif
