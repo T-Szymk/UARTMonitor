@@ -1,5 +1,6 @@
 #include "CppSerial.h"
 
+// constructor
 CppSerial::CppSerial() {
 
 	memset(&m_OverlappedRead, 0, sizeof(OVERLAPPED));
@@ -13,17 +14,19 @@ CppSerial::~CppSerial() {
 
 }
 
+// configure/open serial port using Win32 api
 BOOL CppSerial::Open(int nPort, int nBaud) {
-
+  // if the port is already open, return
 	if (port_open) {
 		return(TRUE);
 	}
 
-	// conver com_port from std::string to cstring
-	const char* szPort = const_cast<char*>(com_ports[nPort].c_str());
+	// convert com_port from std::string to cstring
+	const char* szPort = const_cast<char*>(com_ports[nPort - 1].c_str());
 	LPWSTR szComParams{};
 	DCB dcb;
 
+	// handle is used as the Win32 representation of the serial port
 	port_handle = CreateFileA(szPort,
 		GENERIC_READ | GENERIC_WRITE,
 		0,
@@ -71,6 +74,7 @@ BOOL CppSerial::Open(int nPort, int nBaud) {
 
 }
 
+// close associated serial port
 BOOL CppSerial::Close(void) {
 
 	if (!port_open || port_handle == NULL) { 
@@ -86,6 +90,7 @@ BOOL CppSerial::Close(void) {
 	return(TRUE);
 }
 
+// read the number of bytes currently sat within the serial port buffer
 int CppSerial::ReadDataWaiting(void) {
 
 	if (!port_open || port_handle == NULL) {
@@ -100,6 +105,7 @@ int CppSerial::ReadDataWaiting(void) {
 	return((int)ComStat.cbInQue);
 }
 
+// read the bytes from the serial port buffer and move them into the buffer structure provided
 int CppSerial::ReadData(void* buffer, const int bytes_to_read) {
 
 	if (!port_open || port_handle == NULL) {
@@ -139,6 +145,7 @@ int CppSerial::ReadData(void* buffer, const int bytes_to_read) {
 
 }
 
+// return value of portOpen flag
 BOOL CppSerial::getPortOpen() noexcept {
 	return(port_open);
 }
