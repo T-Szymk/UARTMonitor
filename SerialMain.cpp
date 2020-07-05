@@ -42,7 +42,7 @@ int main() {
 		
 		bytes_to_read = cppserial.ReadDataWaiting();
 		
-		if(bytes_to_read >= 100) {
+		if(bytes_to_read >= 200) {
 			// update bytes to read in case buffer has received additional data since initial check
 			bytes_to_read = cppserial.ReadData(buff, 4095);
 			buff_str.assign(buff, bytes_to_read);
@@ -50,10 +50,9 @@ int main() {
 			
 			if (time_code_pos) {
 			  time_code_val = buff_str.substr(time_code_pos, 6);
-				std::cout << "\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b";
 				std::cout << time_code_val[0] << time_code_val[1] << ":" <<
 					           time_code_val[2] << time_code_val[3] << ":" <<
-										 time_code_val[4] << time_code_val[5] << " UTC+00";
+										 time_code_val[4] << time_code_val[5] << " UTC+00" << std::endl;
 			}
 		}
 	}
