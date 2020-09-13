@@ -22,7 +22,7 @@ BOOL CppSerial::Open(int nPort, int nBaud) {
 	}
 
 	// convert com_port from std::string to cstring
-	const char* szPort = const_cast<char*>(com_ports[nPort - 1].c_str());
+	const char* szPort = com_ports[nPort - 1];
 	LPWSTR szComParams{};
 	DCB dcb;
 

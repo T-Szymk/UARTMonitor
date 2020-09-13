@@ -26,7 +26,6 @@
 #include <Windows.h>
 #include <cstdint>
 #include <memory>
-#include <string>
 #include <array>
 #include <cstring>
 
@@ -73,7 +72,7 @@ class CppSerial {
 
 		// partial list of serial ports available on a windows platform. Note that this list is not
 		// exhaustive, but is sufficient for practical applications.
-		const std::array<std::string, 22> com_ports{ "\\\\.\\COM1",
+		const std::array<const char*, 22> com_ports{ "\\\\.\\COM1",
                                                  "\\\\.\\COM2", "\\\\.\\COM3",
                                                  "\\\\.\\COM4", "\\\\.\\COM5",
                                                  "\\\\.\\COM6", "\\\\.\\COM7",
